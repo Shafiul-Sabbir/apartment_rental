@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tenant List</title>
+</head>
+<body>
+    <h1>Tenants</h1>
+    <a  href="{% url 'add_tenant' %}">Add New Tenant</a>
+    <br><br>
+    {% if tenants %}
+        <p>Total Tenants: {{ tenants|length }}</p>
+        <table border="1">
+            <tr>
+                <th>Name</th>
+                <th>Apartment</th>
+                <th>Phone</th>
+                <th>Move-in Date</th>
+                <th>Move-out Date</th>
+                <th>See Details</th>
+            </tr>
+            {% for tenant in tenants %}
+                <tr>
+                    <td>{{ tenant.name }}</td>
+                    <td>{{ tenant.apartment.number }}</td>
+                    <td>{{ tenant.contact }}</td>
+                    <td>{{ tenant.move_in_date }}</td>
+                    <td>{{ tenant.move_out_date }}</td>
+                    <td><a href="{% url 'tenant_details' tenant.id %}">Details</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No tenants found</p>
+    {% endif %}
+    
+    
+</body>
+</html>

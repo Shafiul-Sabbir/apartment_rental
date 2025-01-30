@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tenant Details - {{ tenant.name }}</title>
+</head>
+<body>
+    <h1>{{ tenant.name }}</h1>
+    <p>Apartment: {{ tenant.apartment.number }}</p>
+    <p>Phone: {{ tenant.contact }}</p>
+    <p>Move-in Date: {{ tenant.move_in_date }}</p>
+    <p>Move-out Date: {{ tenant.move_out_date }}</p>
+    <a href="{% url 'edit_tenant' tenant.id %}">Edit</a>
+    <a href="{% url 'delete_tenant' tenant.id %}">Delete</a>
+    <a href="{% url 'tenant_list' %}">Back to Tenant List</a>
+</body>
+</html>
