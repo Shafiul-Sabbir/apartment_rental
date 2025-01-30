@@ -1,0 +1,13 @@
+jokhon apartment ta free hoia jabe tokhon apartment free dekhabe, ar noile client apartment k 
+booked kora thakle apartment ta k booked dekhabe. that means is_booked namer akta status 
+create korte hobe. normally is_booked = false thakbe. client book korle oi apartment e 
+is_booked= true dekhabe. [ problem solved ]
+
+jokhon move_out_date par hoye jabe tokhon apartmentk clear kore dibe mane is_booked = false hoye jabe .
+but client er total history ta database e theke jabe.
+
+edit er shomoy apartment er option tay abaro value chay, but oitay by default or nijer value ta 
+thakar kotha silo. [ problem solved ]
+
+client k living or moved out status dekhabe client er move_out_date er upor depend kore.
+

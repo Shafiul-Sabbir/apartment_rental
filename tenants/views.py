@@ -17,6 +17,7 @@ def add_tenant(request):
         form = TenantForm(request.POST)
         if form.is_valid():
             form.save()
+            Apartment.objects.filter(id=form.cleaned_data['apartment'].id).update(is_booked=True)
             return redirect('tenant_list')
     else:
         form = TenantForm()
@@ -24,10 +25,24 @@ def add_tenant(request):
 
 def edit_tenant(request, tenant_id):
     tenant = Tenant.objects.get(id=tenant_id)
+    previous_apartment = tenant.apartment
+    
     if request.method == 'POST':
         form = TenantForm(request.POST, instance=tenant)
         if form.is_valid():
-            form.save()
+            # tenant = form.save(commit=False)
+            tenant = form.save()
+            if tenant.move_out_date and tenant.move_out_date < timezone.now():
+                tenant.status = 'moved_out'
+            else:
+                tenant.status = 'living'
+            tenant.save()
+            # Update the is_booked status of the previous apartment
+            previous_apartment.is_booked = False
+            previous_apartment.save()
+            # Update the is_booked status of the new apartment
+            Apartment.objects.filter(id=form.cleaned_data['apartment'].id).update(is_booked=True)
+            
             return redirect('tenant_details', tenant_id=tenant.id)
     else:
         form = TenantForm(instance=tenant)
@@ -35,5 +50,8 @@ def edit_tenant(request, tenant_id):
 
 def delete_tenant(request, tenant_id):
     tenant = Tenant.objects.get(id=tenant_id)
+    apartment = tenant.apartment
     tenant.delete()
+    apartment.is_booked = False
+    apartment.save()
     return redirect('tenant_list')
