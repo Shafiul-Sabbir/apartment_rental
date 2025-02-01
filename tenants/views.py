@@ -19,9 +19,12 @@ def add_tenant(request):
             form.save()
             Apartment.objects.filter(id=form.cleaned_data['apartment'].id).update(is_booked=True)
             return redirect('tenant_list')
+        else:
+            error = form.errors
+            return render(request, 'tenants/add_tenant.html', {'form': form, 'error': error})
     else:
         form = TenantForm()
-    return render(request, 'tenants/add_tenant.html', {'form': form})
+    return render(request, 'tenants/add_tenant.html', {'form': form,})
 
 def edit_tenant(request, tenant_id):
     tenant = Tenant.objects.get(id=tenant_id)

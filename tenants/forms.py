@@ -36,11 +36,18 @@ class TenantForm(forms.ModelForm):
         cleaned_data = super().clean()
         move_in_date = cleaned_data.get('move_in_date')
         move_out_date = cleaned_data.get('move_out_date')
-
+        contact = cleaned_data.get('contact')
+        
+        if contact and not contact.isdigit():
+            self.add_error('contact', 'Contact must be a valid phone number.')
+            
         if move_in_date and move_out_date and move_out_date <= move_in_date:
             self.add_error('move_out_date', 'Move-out date must be after the move-in date.')
 
         return cleaned_data
+    
+    
+    
 class ApartmentForm(forms.ModelForm):
     class Meta:
         model = Apartment

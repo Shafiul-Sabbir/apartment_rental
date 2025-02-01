@@ -1,16 +1,43 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Tenant Details - {{ tenant.name }}</title>
-</head>
-<body>
-    <h1>{{ tenant.name }}</h1>
-    <p>Apartment: {{ tenant.apartment.number }}</p>
-    <p>Phone: {{ tenant.contact }}</p>
-    <p>Move-in Date: {{ tenant.move_in_date }}</p>
-    <p>Move-out Date: {{ tenant.move_out_date }}</p>
-    <a href="{% url 'edit_tenant' tenant.id %}">Edit</a>
-    <a href="{% url 'delete_tenant' tenant.id %}">Delete</a>
-    <a href="{% url 'tenant_list' %}">Back to Tenant List</a>
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit Tenant{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg p-4 text-center">
+        <h2 class="mb-3">{{ tenant.name }}</h2>
+        <hr>
+        <p><strong>Apartment:</strong> {{ tenant.apartment.number }}</p>
+        <p><strong>Phone:</strong> {{ tenant.contact }}</p>
+        <p><strong>Move-in Date:</strong> {{ tenant.move_in_date }}</p>
+        <p><strong>Move-out Date:</strong> {{ tenant.move_out_date|default:"N/A" }}</p>
+        <div class="mt-4">
+            <a href="{% url 'edit_tenant' tenant.id %}" class="btn btn-warning mx-2">Edit</a>
+            <a href="{% url 'delete_tenant' tenant.id %}" class="btn btn-danger mx-2">Delete</a>
+            <a href="{% url 'tenant_list' %}" class="btn btn-secondary mx-2">Back</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Card Styling */
+    .card {
+        width: 50%;
+        min-width: 350px;
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 768px) {
+        .card {
+            width: 90%;
+        }
+    }
+
+    .btn {
+        width: 120px;
+    }
+</style>
+{% endblock %}

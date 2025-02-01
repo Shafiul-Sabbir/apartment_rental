@@ -14,7 +14,7 @@ class Tenant(models.Model):
         ('living', 'Living'),
         ('moved_out', 'Moved Out'),
     ]
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=50)
     contact = models.CharField(max_length=15)
     apartment = models.OneToOneField(Apartment, on_delete=models.CASCADE)
     move_in_date = models.DateTimeField()
@@ -23,4 +23,3 @@ class Tenant(models.Model):
     
     def __str__(self):
         return self.name
-    
