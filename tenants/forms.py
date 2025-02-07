@@ -1,6 +1,5 @@
 from django import forms
 from .models import Apartment, Tenant
-from django.db.models import Q
 from django.utils import timezone
 
 class TenantForm(forms.ModelForm):
@@ -12,17 +11,6 @@ class TenantForm(forms.ModelForm):
             'move_out_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
 
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     occupied_apartments = Apartment.objects.filter(
-    #         is_booked=True,
-    #     ).distinct()
-    #     if self.instance and self.instance.pk:
-    #         self.fields['apartment'].queryset = Apartment.objects.exclude(
-    #             Q(id__in=occupied_apartments) & ~Q(id=self.instance.apartment.id)
-    #         ).distinct()
-    #     else:
-    #         self.fields['apartment'].queryset = Apartment.objects.exclude(id__in=occupied_apartments).distinct()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
