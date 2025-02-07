@@ -11,15 +11,16 @@ class Apartment(models.Model):
     
 class Tenant(models.Model):
     choices = [
+        ('will_arrive', 'Will Arrive'),
         ('living', 'Living'),
         ('moved_out', 'Moved Out'),
     ]
     name = models.CharField(max_length=50)
     contact = models.CharField(max_length=15)
-    apartment = models.OneToOneField(Apartment, on_delete=models.CASCADE)
+    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE)
     move_in_date = models.DateTimeField()
     move_out_date = models.DateTimeField(null=True, blank=True)
-    status = models.CharField(max_length=15, choices=choices, default='living')
+    status = models.CharField(max_length=15, choices=choices,)
     
     def __str__(self):
         return self.name

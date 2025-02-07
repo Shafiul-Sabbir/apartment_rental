@@ -1,20 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Update Profile{% endblock %}
 
 {% block content %}
 <div class="d-flex justify-content-center align-items-center vh-100">
     <div class="form-container">
-        <h2 class="text-center mb-4">Login</h2>
-
+        <h2 class="text-center mb-4">Update Profile</h2>
         <!-- Display Django Messages -->
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% else %}alert-info{% endif %}">
-                    {{ message }}
-                </div>
-            {% endfor %}
+        {% if error %}
+        <div class="alert alert-danger">
+            {{ error }}
+        </div>
         {% endif %}
 
         <form method="post" class="needs-validation" novalidate>
@@ -39,17 +36,15 @@
             {% endfor %}
 
             <div class="btn-container">
-                <button type="submit" class="btn btn-primary">Login</button>
+                <button type="submit" class="btn btn-primary ">Update</button>
             </div>
         </form>
-    </div>    
+    </div>
 </div>
-
 <style>
     .btn-container {
         display: flex;
         justify-content: center;
     }
 </style>
-
 {% endblock %}

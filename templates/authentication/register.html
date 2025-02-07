@@ -7,14 +7,12 @@
 <div class="d-flex justify-content-center align-items-center vh-100">
     <div class="form-container">
         <h2 class="text-center mb-4">Register</h2>
-                <!-- Display Django Messages -->
-                {% if messages %}
-                {% for message in messages %}
-                    <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% else %}alert-info{% endif %}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
+        <!-- Display Django Messages -->
+        {% if error %}
+        <div class="alert alert-danger">
+            {{ error }}
+        </div>
+        {% endif %}
 
         <form method="post" class="needs-validation" novalidate>
             {% csrf_token %}
@@ -37,8 +35,16 @@
             </div>
             {% endfor %}
 
-            <button type="submit" class="btn btn-primary w-100">Register</button>
+            <div class="btn-container">
+                <button type="submit" class="btn btn-primary ">Register</button>
+            </div>
         </form>
     </div>
 </div>
+<style>
+    .btn-container {
+        display: flex;
+        justify-content: center;
+    }
+</style>
 {% endblock %}

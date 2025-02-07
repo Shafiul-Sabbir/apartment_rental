@@ -2,25 +2,6 @@ from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 
-
-class LoginForm(forms.Form):
-    username = forms.CharField(label="Username", widget=forms.TextInput(attrs={'class': 'form-control'}))
-    password = forms.CharField(label="Password", widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-
-    def clean(self):
-        cleaned_data = super().clean()
-        username = cleaned_data.get('username')
-        password = cleaned_data.get('password')
-
-        # Authenticate user
-        user = authenticate(username=username, password=password)
-        if user is None:
-            raise forms.ValidationError("Invalid username or password.")
-        
-        cleaned_data['user'] = user  # Store authenticated user for later use
-        return cleaned_data
-
-
 class RegisterForm(forms.Form):
     username = forms.CharField(label="Username", widget=forms.TextInput(attrs={'class': 'form-control'}))
     email = forms.EmailField(label="Email", widget=forms.EmailInput(attrs={'class': 'form-control'}))
@@ -46,39 +27,37 @@ class RegisterForm(forms.Form):
         )
         return user
 
-
-class PasswordResetForm(forms.Form):
-    email = forms.EmailField(label="Email", widget=forms.EmailInput(attrs={'class': 'form-control'}))
-
-    def clean_email(self):
-        email = self.cleaned_data['email']
-        if not User.objects.filter(email=email).exists():
-            raise forms.ValidationError("Email is not registered.")
-        return email
-
-    def get_user(self):
-        return User.objects.get(email=self.cleaned_data['email'])
-
-
-class SetPasswordForm(forms.Form):
-    password = forms.CharField(label="New Password", widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-    confirm_password = forms.CharField(label="Confirm Password", widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+class LoginForm(forms.Form):
+    username = forms.CharField(label="Username", widget=forms.TextInput(attrs={'class': 'form-control'}))
+    password = forms.CharField(label="Password", widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
     def clean(self):
         cleaned_data = super().clean()
+        username = cleaned_data.get('username')
         password = cleaned_data.get('password')
-        confirm_password = cleaned_data.get('confirm_password')
 
-        if password != confirm_password:
-            raise forms.ValidationError("Passwords do not match.")
-
+        # Authenticate user
+        user = authenticate(username=username, password=password)
+        if user is None:
+            raise forms.ValidationError("Invalid username or password.")
+        
+        cleaned_data['user'] = user  # Store authenticated user for later use
         return cleaned_data
 
-    def save(self, user):
-        user.set_password(self.cleaned_data['password'])
-        user.save()
-        return user
+class UpdateProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+        }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].required = True
+        self.fields['email'].required = True
+        
 
 class ChangePasswordForm(forms.Form):
     old_password = forms.CharField(label="Old Password", widget=forms.PasswordInput(attrs={'class': 'form-control'}))

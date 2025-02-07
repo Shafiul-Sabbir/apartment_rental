@@ -2,6 +2,7 @@
 {% load static %} 
 {% block title %}Tenant List{% endblock %} 
 {% block content %}
+
 <div class="container mt-5">
   <div class="text-center">
     <!-- Display Django Messages -->
@@ -90,7 +91,12 @@
 
   .table th,
   .table td {
+    text-align: center;
     vertical-align: middle;
+    overflow: hidden;
+    white-space: nowrap;
   }
+
+
 </style>
 {% endblock %}
