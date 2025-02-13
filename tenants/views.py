@@ -3,6 +3,7 @@ from .models import Apartment, Tenant
 from .forms import ApartmentForm, TenantForm
 from django.utils import timezone
 from django.contrib import messages
+from calendar_app.models import CalendarEvent  # Import the CalendarEvent model
 # Create your views here.
 
 
@@ -55,6 +56,13 @@ def add_tenant(request):
             if form.is_valid():
                 tenant = form.save()
                 update_tenant_status(tenant)
+                # Create a new CalendarEvent entry
+                CalendarEvent.objects.create(
+                    tenant=tenant,
+                    apartment=tenant.apartment,
+                    start_date=tenant.move_in_date,
+                    end_date=tenant.move_out_date
+                )
                 return redirect('tenant_list')
             else:
                 return render(request, 'tenants/add_tenant.html', {'form': form, 'error': form.errors})

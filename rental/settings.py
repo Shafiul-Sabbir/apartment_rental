@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'static',
     'tenants',
     'authentication',
+    'calendar_app',
 ]
 
 MIDDLEWARE = [

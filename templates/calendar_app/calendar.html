@@ -1,0 +1,166 @@
+<!-- filepath: /Users/apple/Desktop/projects/Rental_Manager/rental/templates/calendar_app/calendar.html -->
+{% extends "base.html" %}
+{% load static %} 
+{% block title %}Apartment Occupancy Calendar{% endblock %} 
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">🏠 Apartment Occupancy Calendar - {{ month }}/{{ year }}</h2>
+    <div class="d-flex justify-content-between mb-3">
+        <a href="{% url 'calendar_view' year=prev_year month=prev_month %}" class="btn btn-primary">Previous</a>
+        <a href="{% url 'calendar_view' year=next_year month=next_month %}" class="btn btn-primary">Next</a>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-bordered text-center calendar-table">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Mon</th>
+                    <th>Tue</th>
+                    <th>Wed</th>
+                    <th>Thu</th>
+                    <th>Fri</th>
+                    <th>Sat</th>
+                    <th>Sun</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for week in calendar_data %}
+                <tr>
+                    {% for day in week %}
+                        {% if day %}
+                            <td class="calendar-cell" onclick="window.location.href='{% url 'day_view' year=year month=month day=day.day %}'">
+                                <div class="date">
+                                    <strong>{{ day.day }}</strong>
+                                </div>
+                                <div class="tenant-list">
+                                    {% for tenant in day.tenants|slice:":3" %}
+                                        <div class="tenant-item">
+                                            <span class="badge tenant-badge">{{ tenant.tenant.name }}</span>
+                                            <span class="apt-info">(Apt {{ tenant.apartment.number }})</span>
+                                        </div>
+                                    {% endfor %}
+                                    {% if day.tenants|length > 3 %}
+                                        <div class="more-tenants" data-toggle="tooltip" data-placement="top"
+                                             title="{% for tenant in day.tenants|slice:"3:" %}{{ tenant.tenant.name }} (Apt {{ tenant.apartment.number }})
+                                             {% if not forloop.last %}, 
+                                             {% endif %}
+                                             {% endfor %}">
+                                            &#x25BC; See More
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        {% else %}
+                            <td class="empty-cell"></td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Custom CSS for better styling -->
+<style>
+    /* Calendar Table Styling */
+    .calendar-table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #ffffff;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .calendar-table th {
+        background-color:rgb(9, 9, 9);
+        color: #ffffff;
+        font-weight: bold;
+        padding: 12px;
+        text-transform: uppercase;
+    }
+
+    .calendar-cell {
+        position: relative;
+        width: 140px;
+        height: 120px;
+        vertical-align: top;
+        cursor: pointer;
+        background-color: #f9f9f9;
+        transition: background 0.3s ease, transform 0.2s ease;
+        padding: 8px;
+        border-radius: 5px;
+    }
+
+    .calendar-cell:hover {
+        background: #e3f2fd;
+        transform: scale(1.02);
+    }
+
+    .empty-cell {
+        background-color: #f1f1f1;
+    }
+
+    /* Date Styling */
+    .date {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+        text-align: center;
+        margin-bottom: 6px;
+    }
+
+    /* Tenant Info */
+    .tenant-list {
+        margin-top: 6px;
+    }
+
+    .tenant-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+    }
+
+    .tenant-badge {
+        background-color: #28a745 !important;
+        color: #ffffff;
+        font-weight: bold;
+        padding: 6px 10px;
+        border-radius: 20px;
+        margin-bottom: 4px;
+    }
+
+    .apt-info {
+        font-size: 12px;
+        color: #555;
+        margin-left: 5px;
+    }
+
+    .more-tenants {
+        margin-top: 6px;
+        font-size: 14px;
+        font-weight: bold;
+        color:rgb(32, 30, 30);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .more-tenants:hover {
+        color:rgb(42, 176, 49);
+    }
+</style>
+
+<!-- Bootstrap Tooltip Activation -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var tooltipElements = document.querySelectorAll('[data-toggle="tooltip"]');
+        tooltipElements.forEach(function (element) {
+            new bootstrap.Tooltip(element);
+        });
+    });
+</script>
+{% endblock %}

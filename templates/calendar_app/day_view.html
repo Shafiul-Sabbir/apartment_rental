@@ -1,0 +1,32 @@
+<!-- filepath: /Users/apple/Desktop/projects/Rental_Manager/rental/templates/calendar_app/day_view.html -->
+{% extends "base.html" %}
+{% block title %}Day View{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Events for {{ day }}/{{ month }}/{{ year }}</h2>
+    <div class="row">
+        {% for event in events %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Tenant : {{ event.tenant.name }}</h5>
+                        <p class="card-text">Apartment : {{ event.apartment.number }}</p>
+                        <p class="card-text">Arrival Date : {{ event.start_date }}</p>
+                        <p class="card-text">Departure Date : {{ event.end_date }}</p>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-warning text-center" role="alert">
+                    No events for this day.
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="text-center mt-4">
+        <a href="{% url 'calendar_view' year=year month=month %}" class="btn btn-primary">Back to Calendar</a>
+    </div>
+</div>
+{% endblock %}
