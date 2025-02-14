@@ -1,11 +1,12 @@
-<!-- filepath: /Users/apple/Desktop/projects/Rental_Manager/rental/templates/calendar_app/calendar.html -->
 {% extends "base.html" %}
+
+
 {% load static %} 
 {% block title %}Apartment Occupancy Calendar{% endblock %} 
 
 {% block content %}
 <div class="container mt-5">
-    <h2 class="text-center mb-4">🏠 Apartment Occupancy Calendar - {{ month }}/{{ year }}</h2>
+    <h2 class="text-center mb-4">📅 Apartment Occupancy Calendar - {{ current_date|date:"F, Y" }}</h2>
     <div class="d-flex justify-content-between mb-3">
         <a href="{% url 'calendar_view' year=prev_year month=prev_month %}" class="btn btn-primary">Previous</a>
         <a href="{% url 'calendar_view' year=next_year month=next_month %}" class="btn btn-primary">Next</a>
@@ -28,7 +29,8 @@
                 <tr>
                     {% for day in week %}
                         {% if day %}
-                            <td class="calendar-cell" onclick="window.location.href='{% url 'day_view' year=year month=month day=day.day %}'">
+                            <td class="calendar-cell {% if day.extra %}extra-month{% endif %}" 
+                                onclick="window.location.href='{% url 'day_view' year=day.year month=day.month day=day.day %}'">
                                 <div class="date">
                                     <strong>{{ day.day }}</strong>
                                 </div>
@@ -42,8 +44,7 @@
                                     {% if day.tenants|length > 3 %}
                                         <div class="more-tenants" data-toggle="tooltip" data-placement="top"
                                              title="{% for tenant in day.tenants|slice:"3:" %}{{ tenant.tenant.name }} (Apt {{ tenant.apartment.number }})
-                                             {% if not forloop.last %}, 
-                                             {% endif %}
+                                             {% if not forloop.last %}, {% endif %}
                                              {% endfor %}">
                                             &#x25BC; See More
                                         </div>
@@ -59,9 +60,15 @@
             </tbody>
         </table>
     </div>
+    <br><br>
+    <div class = "text-center">
+        <a class="btn btn-success mb-3" href="{% url 'add_tenant' %}">
+            ➕ Add New Tenant
+          </a>
+    </div>
 </div>
 
-<!-- Custom CSS for better styling -->
+
 <style>
     /* Calendar Table Styling */
     .calendar-table {
@@ -154,7 +161,6 @@
     }
 </style>
 
-<!-- Bootstrap Tooltip Activation -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         var tooltipElements = document.querySelectorAll('[data-toggle="tooltip"]');
@@ -164,3 +170,4 @@
     });
 </script>
 {% endblock %}
+

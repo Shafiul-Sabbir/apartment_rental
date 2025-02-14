@@ -5,7 +5,7 @@ from django.utils import timezone
 class TenantForm(forms.ModelForm):
     class Meta:
         model = Tenant
-        fields = ['name', 'contact', 'apartment', 'move_in_date', 'move_out_date']
+        fields = ['name', 'contact', 'apartment', 'move_in_date', 'move_out_date', 'remarks']
         widgets = {
             'move_in_date': forms.DateTimeInput(attrs={'type': 'datetime-local' }),
             'move_out_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),

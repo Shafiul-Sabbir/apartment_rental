@@ -5,7 +5,7 @@
 
 <div class="d-flex justify-content-center align-items-center vh-100">
     <div class="form-container">
-        <h2 class="text-center mb-4">Add New Tenant</h2>
+        <h2 class="text-center mb-4">🧑‍💼 Add New Tenant</h2>
         
         {% if error %}
             <div class="alert alert-danger">
@@ -62,6 +62,13 @@
                 {% endfor %}
             </div>
 
+            <div class="mb-3">
+                <label for="id_notes" class="form-label">Remarks</label>
+                <textarea class="form-control {% if form.notes.errors %}is-invalid{% endif %}" id="id_notes" name="notes" rows="3">{{ form.notes.value|default:'' }}</textarea>
+                {% for error in form.notes.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+            </div>
             <button type="submit" class="btn btn-primary">Add Tenant</button>
         </form>
     </div>

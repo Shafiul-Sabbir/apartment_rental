@@ -1,19 +1,18 @@
-<!-- filepath: /Users/apple/Desktop/projects/Rental_Manager/rental/templates/calendar_app/day_view.html -->
 {% extends "base.html" %}
 {% block title %}Day View{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
-    <h2 class="text-center">Events for {{ day }}/{{ month }}/{{ year }}</h2>
+    <h2 class="text-center mb-4"> 📅 Events for {{ formatted_date }}</h2><br>
     <div class="row">
         {% for event in events %}
             <div class="col-md-4 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Tenant : {{ event.tenant.name }}</h5>
-                        <p class="card-text">Apartment : {{ event.apartment.number }}</p>
-                        <p class="card-text">Arrival Date : {{ event.start_date }}</p>
-                        <p class="card-text">Departure Date : {{ event.end_date }}</p>
+                <div class="card event-card shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Tenant: {{ event.tenant.name }}</h5>
+                        <p class="card-text">Apartment: {{ event.apartment.number }}</p>
+                        <p class="card-text">Arrival Date: {{ event.start_date }}</p>
+                        <p class="card-text">Departure Date: {{ event.end_date }}</p>
                     </div>
                 </div>
             </div>
@@ -29,4 +28,39 @@
         <a href="{% url 'calendar_view' year=year month=month %}" class="btn btn-primary">Back to Calendar</a>
     </div>
 </div>
+
+<style>
+    .event-card {
+        border: 2px solid #007bff;
+        border-radius: 10px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .event-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    .card-text {
+        font-size: 1rem;
+        color: #333;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+</style>
 {% endblock %}

@@ -20,6 +20,7 @@ class Tenant(models.Model):
     apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE)
     move_in_date = models.DateTimeField()
     move_out_date = models.DateTimeField(null=True, blank=True)
+    remarks = models.TextField(blank=True, null=True, help_text="Additional details about the tenant.")
     status = models.CharField(max_length=15, choices=choices,)
     
     def __str__(self):
