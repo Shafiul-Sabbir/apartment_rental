@@ -11,6 +11,7 @@
         <p><strong>Phone:</strong> {{ tenant.contact }}</p>
         <p><strong>Move-in Date:</strong> {{ tenant.move_in_date }}</p>
         <p><strong>Move-out Date:</strong> {{ tenant.move_out_date|default:"N/A" }}</p>
+        <p><strong>Remarks:</strong> {{ tenant.remarks }}</p>
         <div class="mt-4 btn-container">
             <a href="{% url 'edit_tenant' tenant.id %}" class="btn btn-warning mx-2">Edit</a>
             <a href="{% url 'delete_tenant' tenant.id %}" class="btn btn-danger mx-2">Delete</a>

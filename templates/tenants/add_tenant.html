@@ -63,9 +63,9 @@
             </div>
 
             <div class="mb-3">
-                <label for="id_notes" class="form-label">Remarks</label>
-                <textarea class="form-control {% if form.notes.errors %}is-invalid{% endif %}" id="id_notes" name="notes" rows="3">{{ form.notes.value|default:'' }}</textarea>
-                {% for error in form.notes.errors %}
+                <label for="id_remarks" class="form-label">Remarks</label>
+                <textarea class="form-control {% if form.remarks.errors %}is-invalid{% endif %}" id="id_remarks" name="remarks" rows="3">{{ form.remarks.value|default:'' }}</textarea>
+                {% for error in form.remarks.errors %}
                     <div class="invalid-feedback">{{ error }}</div>
                 {% endfor %}
             </div>

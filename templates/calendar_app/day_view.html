@@ -13,6 +13,20 @@
                         <p class="card-text">Apartment: {{ event.apartment.number }}</p>
                         <p class="card-text">Arrival Date: {{ event.start_date }}</p>
                         <p class="card-text">Departure Date: {{ event.end_date }}</p>
+                        <p class="card-text">Status: {{ event.tenant.status }}</p>
+                        
+                        {% if event.tenant.remarks|length > 30 %}
+                            <p class="card-text">Remarks:
+                                <span class="remarks-tooltip" data-full-text="{{ event.tenant.remarks }}">
+                                    {{ event.tenant.remarks|truncatechars:30 }}
+                                </span>
+                            </p>
+                            
+                        {% else %}
+                            <p class="card-text">
+                                Remarks: {{ event.tenant.remarks|default:"N/A" }}
+                            </p>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -34,6 +48,8 @@
         border: 2px solid #007bff;
         border-radius: 10px;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative; /* Ensure z-index works */
+        z-index: 1; /* Set a lower z-index for the card */
     }
 
     .event-card:hover {
@@ -62,5 +78,29 @@
         background-color: #0056b3;
         border-color: #0056b3;
     }
+
+    
+    .remarks-tooltip {
+        position: relative;
+        cursor: pointer;
+        display: inline-block;
+        white-space: normal; /* Allow wrapping */
+    }
+
+    .remarks-tooltip:hover::after {
+        content: attr(data-full-text);
+        position: absolute;
+        left: 0;
+        top: 100%;
+        width: 100%; /* Match the width of the card */
+        background: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        white-space: normal; /* Allow wrapping */
+        z-index: 10;
+        overflow: visible; /* Allow overflow at the bottom */
+    }
+    
 </style>
 {% endblock %}
