@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.utils.timezone import now
 from .models import CalendarEvent
-from datetime import datetime, timedelta
+from datetime import datetime
 import calendar
 from datetime import date
 
