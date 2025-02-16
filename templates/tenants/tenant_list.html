@@ -1,8 +1,12 @@
 {% extends 'base.html' %} 
 {% load static %} 
 {% block title %}Tenant List{% endblock %} 
-{% block content %}
 
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/tenants/tenant_list.css' %}">
+{% endblock %}
+
+{% block content %}
 <div class="container mt-5">
   <div class="text-center">
     <!-- Display Django Messages -->
@@ -69,34 +73,4 @@
   {% endif %}
 </div>
 
-<style>
-  .card {
-    border-radius: 10px;
-    background: #f8f9fa;
-  }
-
-  /* Add hover effect on rows */
-  table tbody tr:hover {
-    background-color: #f1f1f1 !important;
-  }
-
-  /* Responsive button */
-  .btn {
-    transition: all 0.3s ease-in-out;
-  }
-
-  .btn:hover {
-    transform: scale(1.05);
-  }
-
-  .table th,
-  .table td {
-    text-align: center;
-    vertical-align: middle;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-
-
-</style>
 {% endblock %}

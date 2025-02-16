@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}Edit Tenant{% endblock %}
-{% block content %}
 
-<div class="d-flex justify-content-center align-items-center vh-100">
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/tenants/edit_tenant.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center vh-100 mt-5">
     <div class="form-container">
         <h2 class="text-center mb-4"> 🧑‍💼 Edit {{ tenant.name }} Info</h2>
         <form method="post" class="needs-validation" novalidate>
@@ -36,61 +40,9 @@
     </div>
 </div>
 
-<style>
-    /* Centered Form Styling */
-    .form-container {
-        width: 50%;
-        min-width: 350px;
-        background: #f8f9fa;
-        padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    }
+{% block extra_scripts %} 
+    <script src="{% static 'js/tenants/edit_tenant.js' %}"></script>
+{% endblock %}
 
-    @media (max-width: 768px) {
-        .form-container {
-            width: 90%;
-        }
-    }
 
-    /* Style for Form Fields */
-    select, input {
-        width: 100%;
-        padding: 8px;
-        border-radius: 5px;
-        border: 1px solid #ced4da;
-        background: white;
-    }
-
-    /* Centered Layout */
-    .vh-100 {
-        height: 100vh;
-    }
-
-    /* Styled Buttons */
-    .btn {
-        width: 100%;
-        padding: 10px;
-        font-size: 16px;
-        border-radius: 5px;
-    }
-</style>
-
-<script>
-    // Bootstrap validation
-    (function () {
-        'use strict'
-        var forms = document.querySelectorAll('.needs-validation')
-        Array.prototype.slice.call(forms)
-            .forEach(function (form) {
-                form.addEventListener('submit', function (event) {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
-                    form.classList.add('was-validated')
-                }, false)
-            })
-    })();
-</script>
 {% endblock %}

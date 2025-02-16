@@ -1,14 +1,15 @@
 from django.shortcuts import render, redirect
 from django.utils.timezone import now
+from django.contrib import messages
 from .models import CalendarEvent
-from datetime import datetime
+from datetime import datetime, date
 import calendar
-from datetime import date
 
 def calendar_view(request, year, month):
     today = datetime.today()
     year = year or today.year
-    month = month or today.month
+    if month > 12 or month < 1:
+        month = today.month
 
     # Get the first day of the month and total days
     first_day_of_month = datetime(year, month, 1)
@@ -28,7 +29,7 @@ def calendar_view(request, year, month):
     week = []
     first_weekday = first_day_of_month.weekday()  # 0 = Monday, 6 = Sunday
     
-    # Fill previous month's dates
+    # Fill previous month's dates to complete the first row
     for i in range(first_weekday):
         day = prev_month_days - first_weekday + i + 1
         week.append({"day": day, "month": prev_month, "year": prev_year, "extra": True})
@@ -72,30 +73,38 @@ def calendar_view(request, year, month):
     })
 
 def calendar_redirect(request):
-    today = datetime.today()
-    return redirect('calendar_view', year=today.year, month=today.month)
+    user = request.user
+    if user.is_authenticated and user.is_superuser :
+        today = datetime.today()
+        return redirect('calendar_view', year=today.year, month=today.month)
+    else:
+        messages.error(request, 'You have to log in as an Admin to access this page.')
+        return redirect('login')
 
 def day_view(request, year, month, day):
-    try:
-        # Convert numerical date into a full formatted string
-        formatted_date = datetime(year, month, day).strftime("%d %B, %Y")
-        
-        day_start = datetime(year, month, day)
-        day_end = datetime(year, month, day, 23, 59, 59)
-        
-        events = CalendarEvent.objects.filter(
-            start_date__lte=day_end,
-            end_date__gte=day_start
-        )
-        
-        return render(request, 'calendar_app/day_view.html', {
-            'events': events,
-            'formatted_date': formatted_date,  # Pass formatted date
-            'year': year,
-            'month': month,
-            'day': day
-        })
-    except ValueError:
-        return render(request, 'calendar_app/error.html', {'error_message': "Invalid date selected."})
-
-
+    user = request.user
+    if user.is_authenticated and user.is_superuser :
+        try:
+            # Convert numerical date into a full formatted string
+            formatted_date = datetime(year, month, day).strftime("%d %B, %Y")
+            
+            day_start = datetime(year, month, day)
+            day_end = datetime(year, month, day, 23, 59, 59)
+            
+            events = CalendarEvent.objects.filter(
+                start_date__lte=day_end,
+                end_date__gte=day_start
+            )
+            
+            return render(request, 'calendar_app/day_view.html', {
+                'events': events,
+                'formatted_date': formatted_date,  # Pass formatted date
+                'year': year,
+                'month': month,
+                'day': day
+            })
+        except ValueError:
+            return render(request, 'calendar_app/error.html', {'error_message': "Invalid date selected."})
+    else:
+        messages.error(request, 'You have to log in as an Admin to access this page.')
+        return redirect('login')
