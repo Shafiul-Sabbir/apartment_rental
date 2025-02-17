@@ -33,7 +33,9 @@
                     {% for day in week %}
                         {% if day %}
                             {% if day.day == today_date and day.month == today_month and day.year == today_year %}
-                                <td class="today-cell" onclick="window.location.href='{% url 'day_view' year=day.year month=day.month day=day.day %}'">
+                                <td class="today-cell" 
+                                onclick="fetchEvents({{ day.year }}, {{ day.month }}, {{ day.day }})">
+                                {% comment %} onclick="window.location.href='{% url 'day_view' year=day.year month=day.month day=day.day %}'"> {% endcomment %}
                                     <div>
                                         <span class="today">{{ day.day }}</span>
                                     </div>
@@ -57,7 +59,8 @@
 
                             {% else %}
                                 <td class="calendar-cell {% if day.extra %}extra-month{% endif %}" 
-                                onclick="window.location.href='{% url 'day_view' year=day.year month=day.month day=day.day %}'">
+                                onclick="fetchEvents({{ day.year }}, {{ day.month }}, {{ day.day }})">
+                                {% comment %} onclick="window.location.href='{% url 'day_view' year=day.year month=day.month day=day.day %}'"> {% endcomment %}
                                     <div>
                                         {% if day.extra %}
                                             <span class="extra-month-date">{{ day.day }}</span>
@@ -99,6 +102,26 @@
           </a>
     </div>
 </div>
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eventModalLabel">📅 Rent Details For <span id="modalDate"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="eventList">
+                    <!-- Event cards will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 {% block extra_scripts %}
     <script src="{% static 'js/calendar_app/calendar.js' %}"></script>

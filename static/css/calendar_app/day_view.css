@@ -1,10 +1,20 @@
+.modal-dialog {
+    max-width: 50%; /* Increase modal width */
+}
 .event-card {
-    position: relative; /* Ensure tooltip positions relative to this */
-    overflow: visible; /* Prevent clipping */
+    max-height: 320px; /* Set a minimum height */
+    width: 320px; /* Increase width */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     border: 2px solid #007bff;
     border-radius: 10px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    z-index: 1; /* Keep cards lower than tooltips */
+    padding: 15px;
+}
+
+.event-card .card-body {
+    flex-grow: 1; /* Make sure the content is evenly distributed */
 }
 
 .event-card:hover {
@@ -34,27 +44,3 @@
     border-color: #0056b3;
 }
 
-.remarks-tooltip {
-    position: relative;
-    cursor: pointer;
-    display: inline-block;
-    white-space: normal; /* Allow wrapping */
-    z-index: 10; /* Ensure tooltip is above the card */
-}
-
-.remarks-tooltip:hover::after {
-    content: attr(data-full-text);
-    position: absolute;
-    left: 50%;
-    bottom: 100%; /* Move the tooltip above the text */
-    transform: translateX(-50%);
-    width: 300px; /* Set a max width for readability */
-    background: rgba(0, 0, 0, 0.9);
-    color: #fff;
-    padding: 8px 12px;
-    border-radius: 5px;
-    white-space: normal; /* Allow wrapping */
-    text-align: center;
-    z-index: 1000; /* Higher than cards to show above */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-}

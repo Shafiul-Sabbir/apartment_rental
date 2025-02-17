@@ -116,3 +116,30 @@ def day_view(request, year, month, day):
     else:
         messages.error(request, 'You have to log in as an Admin to access this page.')
         return redirect('login')
+    
+from django.http import JsonResponse
+
+def get_events(request, year, month, day):
+    try:
+        selected_date = date(year, month, day)
+        events = CalendarEvent.objects.filter(
+            start_date__lte=selected_date,
+            end_date__gte=selected_date
+        )
+
+        event_data = []
+        for event in events:
+            event_data.append({
+                "tenant_name": event.tenant.name,
+                "apartment_number": event.apartment.number,
+                "start_date": event.start_date.strftime("%d %B, %Y"),
+                "end_date": event.end_date.strftime("%d %B, %Y"),
+                "tenant_status": event.tenant.status,
+                "tenant_remarks": event.tenant.remarks,
+            })
+
+        return JsonResponse({"events": event_data})
+
+    except ValueError:
+        return JsonResponse({"error": "Invalid date"}, status=400)
+
