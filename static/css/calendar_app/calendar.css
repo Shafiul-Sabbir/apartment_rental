@@ -1,4 +1,3 @@
-
 /* Calendar Table Styling */
 .calendar-table {
     width: 100%;
@@ -10,13 +9,15 @@
 }
 
 .calendar-table th {
-    background-color:rgb(9, 9, 9);
+    background-color: rgb(9, 9, 9);
     color: #ffffff;
     font-weight: bold;
     padding: 12px;
     text-transform: uppercase;
 }
-
+.calendar-row{
+    height: 100px;
+}
 .calendar-cell {
     position: relative;
     width: 140px;
@@ -28,9 +29,24 @@
     padding: 8px;
     border-radius: 5px;
 }
-
 .calendar-cell:hover {
     background: #e3f2fd;
+    transform: scale(1.02);
+}
+.today-cell {
+    position: relative;
+    width: 140px;
+    height: 120px;
+    vertical-align: top;
+    cursor: pointer;
+    background-color: #caf0b5 !important;
+    transition: background 0.3s ease, transform 0.2s ease;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+.today-cell:hover {
+    background: #e3f2fd !important;
     transform: scale(1.02);
 }
 
@@ -39,12 +55,21 @@
 }
 
 /* Date Styling */
-.date {
-    font-size: 18px;
+.extra-month-date, .month-date {
+    font-size: 16px;
     font-weight: bold;
     color: #333;
     text-align: center;
     margin-bottom: 6px;
+}
+
+.extra-month-date {
+    color: #7f7b7b;
+    font-weight: semi-bold;
+}
+
+.today {
+    font-weight: bold;
 }
 
 /* Tenant Info */
@@ -78,7 +103,7 @@
     margin-top: 6px;
     font-size: 14px;
     font-weight: bold;
-    color:rgb(32, 30, 30);
+    color: rgb(32, 30, 30);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -86,5 +111,63 @@
 }
 
 .more-tenants:hover {
-    color:rgb(42, 176, 49);
+    color: rgb(42, 176, 49);
+}
+
+/* Responsive Styling */
+@media screen and (max-width: 1024px) {
+    .calendar-cell {
+        width: 100px;
+        height: 100px;
+    }
+    .month-date, .extra-month-date {
+        font-size: 14px;
+    }
+    .tenant-badge {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+    .apt-info {
+        font-size: 10px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .calendar-cell {
+        width: 80px;
+        height: 80px;
+        padding: 5px;
+    }
+    .month-date, .extra-month-date {
+        font-size: 12px;
+    }
+    .tenant-badge {
+        padding: 3px 6px;
+        font-size: 10px;
+    }
+    .apt-info {
+        font-size: 9px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .calendar-table th {
+        padding: 8px;
+        font-size: 12px;
+    }
+    .calendar-cell {
+        width: 60px;
+        height: 60px;
+        padding: 4px;
+    }
+    .month-date, .extra-month-date {
+        font-size: 10px;
+    }
+    .tenant-badge {
+        padding: 2px 5px;
+        font-size: 9px;
+    }
+    .apt-info {
+        font-size: 8px;
+    }
 }

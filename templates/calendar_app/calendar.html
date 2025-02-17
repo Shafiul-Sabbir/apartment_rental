@@ -29,32 +29,60 @@
             </thead>
             <tbody>
                 {% for week in calendar_data %}
-                <tr>
+                <tr class="calendar-row">
                     {% for day in week %}
                         {% if day %}
-                            <td class="calendar-cell {% if day.extra %}extra-month{% endif %}" 
-                             onclick="window.location.href='{% url 'day_view' year=day.year month=day.month day=day.day %}'">
-                                <div class="date">
-                                    <strong>{{ day.day }}</strong>
-                                </div>
-                                <div class="tenant-list">
-                                    {% for tenant in day.tenants|slice:":3" %}
-                                        <div class="tenant-item">
-                                            <span class="badge tenant-badge">{{ tenant.tenant.name }}</span>
-                                            <span class="apt-info">(Apt {{ tenant.apartment.number }})</span>
-                                        </div>
-                                    {% endfor %}
-                                    {% if day.tenants|length > 3 %}
-                                        <div class="more-tenants" data-toggle="tooltip" data-placement="top"
-                                             title="{% for tenant in day.tenants|slice:"3:" %}{{ tenant.tenant.name }} (Apt {{ tenant.apartment.number }})
-                                             {% if not forloop.last %}, {% endif %}
-                                             {% endfor %}">
-                                            &#x25BC; See More
-                                        </div>
-                                    {% endif %}
-                                </div>
-                            </td>
+                            {% if day.day == today_date and day.month == today_month and day.year == today_year %}
+                                <td class="today-cell" onclick="window.location.href='{% url 'day_view' year=day.year month=day.month day=day.day %}'">
+                                    <div>
+                                        <span class="today">{{ day.day }}</span>
+                                    </div>
+                                    <div class="tenant-list">
+                                        {% for tenant in day.tenants|slice:":3" %}
+                                            <div class="tenant-item">
+                                                <span class="badge tenant-badge">{{ tenant.tenant.name }}</span>
+                                                <span class="apt-info">(Apt {{ tenant.apartment.number }})</span>
+                                            </div>
+                                        {% endfor %}
+                                        {% if day.tenants|length > 3 %}
+                                            <div class="more-tenants" data-toggle="tooltip" data-placement="top"
+                                                title="{% for tenant in day.tenants|slice:"3:" %}{{ tenant.tenant.name }} (Apt {{ tenant.apartment.number }})
+                                                {% if not forloop.last %}, {% endif %}
+                                                {% endfor %}">
+                                                &#x25BC; See More
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </td>
 
+                            {% else %}
+                                <td class="calendar-cell {% if day.extra %}extra-month{% endif %}" 
+                                onclick="window.location.href='{% url 'day_view' year=day.year month=day.month day=day.day %}'">
+                                    <div>
+                                        {% if day.extra %}
+                                            <span class="extra-month-date">{{ day.day }}</span>
+                                        {% else %}
+                                            <span class="month-date">{{ day.day }}</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="tenant-list">
+                                        {% for tenant in day.tenants|slice:":3" %}
+                                            <div class="tenant-item">
+                                                <span class="badge tenant-badge">{{ tenant.tenant.name }}</span>
+                                                <span class="apt-info">(Apt {{ tenant.apartment.number }})</span>
+                                            </div>
+                                        {% endfor %}
+                                        {% if day.tenants|length > 3 %}
+                                            <div class="more-tenants" data-toggle="tooltip" data-placement="top"
+                                                title="{% for tenant in day.tenants|slice:"3:" %}{{ tenant.tenant.name }} (Apt {{ tenant.apartment.number }})
+                                                {% if not forloop.last %}, {% endif %}
+                                                {% endfor %}">
+                                                &#x25BC; See More
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            {% endif %}
                         {% else %}
                             <td class="empty-cell"></td>
                         {% endif %}

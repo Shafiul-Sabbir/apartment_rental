@@ -7,6 +7,9 @@ import calendar
 
 def calendar_view(request, year, month):
     today = datetime.today()
+    today_date = today.day
+    today_month = today.month
+    today_year = today.year
     year = year or today.year
     if month > 12 or month < 1:
         month = today.month
@@ -32,7 +35,7 @@ def calendar_view(request, year, month):
     # Fill previous month's dates to complete the first row
     for i in range(first_weekday):
         day = prev_month_days - first_weekday + i + 1
-        week.append({"day": day, "month": prev_month, "year": prev_year, "extra": True})
+        week.append({"day": day, "month": prev_month, "year": prev_year, "extra": True })
 
     # Fill current month days
     for day in range(1, total_days + 1):
@@ -61,9 +64,14 @@ def calendar_view(request, year, month):
             date_obj = date(day_info["year"], day_info["month"], day_info["day"])
             day_info["tenants"] = events.filter(start_date__lte=date_obj, end_date__gte=date_obj)
 
+    
     return render(request, 'calendar_app/calendar.html', {
         'current_date': first_day_of_month,
         'calendar_data': month_calendar,
+        'today': today,
+        'today_date': today_date,
+        'today_month': today_month,
+        'today_year': today_year,
         'year': year,
         'month': month,
         'prev_year': prev_year,

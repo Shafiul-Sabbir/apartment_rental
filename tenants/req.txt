@@ -1,8 +1,12 @@
 remarks er tooltip ta full dekhaite hobe hover korle. [ problem solved ]
 
-calendar er view_day er card gula center allign hobe
+calendar er view_day er card gula center allign hobe [ problem solved ]
 
 calendar ta use na kore tenant model er data use korei calendar_app er kaj ta korbe.
+
+calendar er previous ar next month er data running month page e gray dekhabe [ problem solved ].
+
+today er date ta vinno color er dekhabe [ problem solved ]
 
 jokhon apartment ta free hoia jabe tokhon apartment free dekhabe, ar noile client apartment k 
 booked kora thakle apartment ta k booked dekhabe. that means is_booked namer akta status 
