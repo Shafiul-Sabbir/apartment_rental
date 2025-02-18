@@ -1,9 +1,24 @@
-.modal-dialog {
-    max-width: 50%; /* Increase modal width */
+.modal{
+    display: flex ;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Ensure modal takes full viewport height */
+    top: 10%;
 }
+.modal-dialog {
+    max-width: 90%; /* Responsive width */
+    max-height: 90vh; /* Prevent modal from being too large */
+    margin: auto; /* Ensures proper centering */
+}
+
+.modal-body {
+    max-height: 70vh; /* Prevent modal from growing too large */
+    overflow-y: auto; /* Enable scroll inside modal */
+    padding: 15px;
+}
+
 .event-card {
-    max-height: 320px; /* Set a minimum height */
-    width: 320px; /* Increase width */
+    min-height: 250px; /* Ensures a standard height */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -11,6 +26,7 @@
     border-radius: 10px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     padding: 15px;
+    background-color: #f8f9fa; /* Light gray background */
 }
 
 .event-card .card-body {
@@ -31,6 +47,7 @@
 .card-text {
     font-size: 1rem;
     color: #333;
+    margin-bottom: 5px;
 }
 
 .btn-primary {
@@ -44,3 +61,13 @@
     border-color: #0056b3;
 }
 
+/* Make sure cards stack properly on small screens */
+@media (max-width: 768px) {
+    .modal-dialog {
+        max-width: 95%;
+        max-height: 90vh;
+    }
+    .event-card {
+        min-height: 220px;
+    }
+}

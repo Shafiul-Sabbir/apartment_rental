@@ -4,66 +4,71 @@ from django.contrib import messages
 from .models import CalendarEvent
 from datetime import datetime, date
 import calendar
+from django.http import JsonResponse
 
 def calendar_view(request, year, month):
-    today = datetime.today()
-    today_date = today.day
-    today_month = today.month
-    today_year = today.year
-    year = year or today.year
+    """
+    View to display the monthly calendar with events.
+    If no specific year or month is provided, it defaults to the current month.
+    """
+    today = datetime.today()  # Get today's date
+    today_date = today.day  # Extract current day
+    today_month = today.month  # Extract current month
+    today_year = today.year  # Extract current year
+    year = year or today.year  # Use provided year or fallback to current year
+    
+    # Ensure month is within valid range (1-12)
     if month > 12 or month < 1:
         month = today.month
-
-    # Get the first day of the month and total days
+    
+    # Get first day of the month and total number of days
     first_day_of_month = datetime(year, month, 1)
     _, total_days = calendar.monthrange(year, month)
     
-    # Get previous and next month details
+    # Calculate previous and next month details
     prev_month = month - 1 if month > 1 else 12
     prev_year = year if month > 1 else year - 1
     next_month = month + 1 if month < 12 else 1
     next_year = year if month < 12 else year + 1
-
-    # Get previous month's last day
-    _, prev_month_days = calendar.monthrange(prev_year, prev_month)
-
-    # Generate calendar matrix (6 rows, 7 columns)
-    month_calendar = []
-    week = []
-    first_weekday = first_day_of_month.weekday()  # 0 = Monday, 6 = Sunday
     
-    # Fill previous month's dates to complete the first row
+    # Get last day of previous month
+    _, prev_month_days = calendar.monthrange(prev_year, prev_month)
+    
+    month_calendar = []  # Stores the entire month's calendar structure
+    week = []  # Stores a single week's data
+    first_weekday = first_day_of_month.weekday()  # Find the starting weekday (0 = Monday, 6 = Sunday)
+    
+    # Fill in previous month's dates to align the first row
     for i in range(first_weekday):
         day = prev_month_days - first_weekday + i + 1
         week.append({"day": day, "month": prev_month, "year": prev_year, "extra": True })
-
-    # Fill current month days
+    
+    # Fill in the current month's dates
     for day in range(1, total_days + 1):
         week.append({"day": day, "month": month, "year": year, "extra": False})
-        if len(week) == 7:
+        if len(week) == 7:  # If a full week is completed, push to month_calendar
             month_calendar.append(week)
             week = []
-
-    # Fill next month's dates to complete the last row
+    
+    # Fill in next month's dates to align the last row
     next_day = 1
     while len(week) < 7:
         week.append({"day": next_day, "month": next_month, "year": next_year, "extra": True})
         next_day += 1
     if week:
         month_calendar.append(week)
-
-    # Fetch events for all relevant dates
+    
+    # Fetch all events occurring within the selected months
     events = CalendarEvent.objects.filter(
         start_date__year__in=[prev_year, year, next_year],
         start_date__month__in=[prev_month, month, next_month]
     )
-
-    # Assign events to the respective dates
+    
+    # Assign events to their respective dates
     for week in month_calendar:
         for day_info in week:
             date_obj = date(day_info["year"], day_info["month"], day_info["day"])
             day_info["tenants"] = events.filter(start_date__lte=date_obj, end_date__gte=date_obj)
-
     
     return render(request, 'calendar_app/calendar.html', {
         'current_date': first_day_of_month,
@@ -81,8 +86,12 @@ def calendar_view(request, year, month):
     })
 
 def calendar_redirect(request):
+    """
+    Redirects the user to the current month's calendar if they are an admin.
+    Otherwise, displays an error message and redirects to login.
+    """
     user = request.user
-    if user.is_authenticated and user.is_superuser :
+    if user.is_authenticated and user.is_superuser:
         today = datetime.today()
         return redirect('calendar_view', year=today.year, month=today.month)
     else:
@@ -90,15 +99,17 @@ def calendar_redirect(request):
         return redirect('login')
 
 def day_view(request, year, month, day):
+    """
+    Displays events occurring on a specific day, accessible only by admins.
+    """
     user = request.user
-    if user.is_authenticated and user.is_superuser :
+    if user.is_authenticated and user.is_superuser:
         try:
-            # Convert numerical date into a full formatted string
-            formatted_date = datetime(year, month, day).strftime("%d %B, %Y")
+            formatted_date = datetime(year, month, day).strftime("%d %B, %Y")  # Format date nicely
+            day_start = datetime(year, month, day)  # Start of the selected day
+            day_end = datetime(year, month, day, 23, 59, 59)  # End of the selected day
             
-            day_start = datetime(year, month, day)
-            day_end = datetime(year, month, day, 23, 59, 59)
-            
+            # Fetch events that are active on this day
             events = CalendarEvent.objects.filter(
                 start_date__lte=day_end,
                 end_date__gte=day_start
@@ -106,7 +117,7 @@ def day_view(request, year, month, day):
             
             return render(request, 'calendar_app/day_view.html', {
                 'events': events,
-                'formatted_date': formatted_date,  # Pass formatted date
+                'formatted_date': formatted_date,
                 'year': year,
                 'month': month,
                 'day': day
@@ -116,17 +127,19 @@ def day_view(request, year, month, day):
     else:
         messages.error(request, 'You have to log in as an Admin to access this page.')
         return redirect('login')
-    
-from django.http import JsonResponse
 
 def get_events(request, year, month, day):
+    """
+    Returns event data for a specific date as a JSON response.
+    """
     try:
-        selected_date = date(year, month, day)
+        selected_date = date(year, month, day)  # Convert to date object
         events = CalendarEvent.objects.filter(
             start_date__lte=selected_date,
             end_date__gte=selected_date
         )
-
+        
+        # Prepare event data in JSON format
         event_data = []
         for event in events:
             event_data.append({
@@ -137,9 +150,7 @@ def get_events(request, year, month, day):
                 "tenant_status": event.tenant.status,
                 "tenant_remarks": event.tenant.remarks,
             })
-
+        
         return JsonResponse({"events": event_data})
-
     except ValueError:
         return JsonResponse({"error": "Invalid date"}, status=400)
-

@@ -1,7 +1,6 @@
 from django.db import models
 
 # Create your models here.
-
 class Apartment(models.Model):
     number = models.PositiveIntegerField(unique=True)
     is_booked = models.BooleanField(default=False)

@@ -1,7 +1,5 @@
 /* Calendar Table Styling */
-.modal-dialog {
-    max-width: 90%; /* Increase modal width */
-}
+
 .calendar-table {
     width: 100%;
     border-collapse: collapse;

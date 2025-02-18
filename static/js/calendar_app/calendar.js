@@ -114,10 +114,11 @@ function fetchEvents(year, month, day) {
 
     // Show the modal
     $('#eventModal').modal('show');
+
+    $(document).ready(function () {
+        $(".close").click(function () {
+            $("#eventModal").modal("hide");
+        });
+    });
 }
 
-// $(document).ready(function () {
-//     $("#closeModalButton").click(function () {
-//         $("#eventModal").modal("hide");
-//     });
-// });
