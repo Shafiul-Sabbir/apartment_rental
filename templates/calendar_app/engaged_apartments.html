@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Engaged Apartments{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/calendar_app/engaged_apartments.css' %}">
+{% endblock %}
+
+{% block content %}
+
+
+<h2 class="text-center m-4">📅 Engaged Apartments For ( {{ start_date }} to {{ end_date }} )</h2>
+<div class="filter-form">
+        <!-- Date Filter Form -->
+    <form method="GET">
+        <label for="start_date">Start Date:</label>
+        <input type="date" id="start_date" name="start_date" value="{{ start_date }}">
+        
+        <label for="end_date">End Date:</label>
+        <input type="date" id="end_date" name="end_date" value="{{ end_date }}">
+
+        <button type="submit">Filter</button>
+    </form>
+</div>
+
+
+{% for data in apartment_data %}
+<!-- Table Container -->
+<div class="table-container">
+    <!-- Left Table: Apartments -->
+    <div class="left-table">
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2">Apartment Number: {{ data.apartment.number }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tenant in data.tenants %}
+                    <tr>
+                        <td class="year-cell">{{ tenant.year }}</td>
+                        <td class="name-cell">{{ tenant.name }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Right Table: Calendar -->
+    <div class="right-table">
+        <table>
+            <thead>
+                <tr>
+                    {% for day in date_range %}
+                        <th>{{ day.day }}</th>  <!-- Show only day, not year or month -->
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for tenant in data.tenants %}
+                    <tr>
+                        {% for day in date_range %}
+                            {% if day < today %}  <!-- If day is in the past -->
+                                <td class="{% if day|date:'Y-m-d' in tenant.dates %}past{% endif %}"></td>
+                            {% else %}
+                                <td class="{% if day|date:'Y-m-d' in tenant.dates %}engaged{% endif %}"></td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+{% endfor %}
+
+{% endblock %}

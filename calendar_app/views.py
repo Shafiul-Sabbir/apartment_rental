@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.utils.timezone import now
 from django.contrib import messages
 from .models import CalendarEvent
-from datetime import datetime, date
+from tenants.models import Apartment, Tenant
+from datetime import datetime, date, timedelta
 import calendar
 from django.http import JsonResponse
 
@@ -154,3 +155,70 @@ def get_events(request, year, month, day):
         return JsonResponse({"events": event_data})
     except ValueError:
         return JsonResponse({"error": "Invalid date"}, status=400)
+
+def engaged_apartments(request):
+    today = now().date()
+    print(today)
+    # Get the filter dates from the request
+    start_date = request.GET.get('start_date', now().date())
+    end_date = request.GET.get('end_date', now().date() + timedelta(days=30))  # Default to next 30 days
+
+    # Convert to datetime objects
+    start_date = datetime.strptime(str(start_date), "%Y-%m-%d").date()
+    end_date = datetime.strptime(str(end_date), "%Y-%m-%d").date()
+
+    print(start_date, end_date)
+    
+    # Fetch engaged apartments (those with at least one tenant)
+    engaged_apartments = Apartment.objects.filter(
+        tenant__isnull=False,
+        tenant__move_in_date__lte=end_date,
+        tenant__move_out_date__gte=start_date).distinct().order_by('number')
+
+    # Collect tenant data per apartment
+    apartment_data = []
+    for apartment in engaged_apartments:
+        # print(apartment)
+        tenants = Tenant.objects.filter(apartment=apartment).order_by("move_in_date")
+        tenant_entries = []
+        
+        for tenant in tenants:
+            # print(f"for apartment {apartment}, tenant: {tenant}" )
+            if tenant.move_out_date and tenant.move_out_date.date() >= start_date:
+                move_in = tenant.move_in_date.date()
+                # print(f"{tenant.name} move in date: {tenant.move_in_date.date()} and move_in: {move_in}")
+                move_out = tenant.move_out_date.date() if tenant.move_out_date else None
+                # print(f"{tenant.name} move out date: {tenant.move_out_date.date()} and move_out: {move_out}")
+
+                # Prepare date range for visualization
+                date_range = []
+                if move_out:
+                    current_date = move_in
+                    while current_date <= move_out and current_date <= end_date:
+                        if current_date >= start_date:
+                            date_range.append(current_date.strftime("%Y-%m-%d"))
+                        current_date += timedelta(days=1)
+
+                tenant_entries.append({
+                    "name": tenant.name,
+                    "year": move_in.year,
+                    "move_in": move_in.strftime("%Y-%m-%d"),
+                    "move_out": move_out.strftime("%Y-%m-%d") if move_out else "Present",
+                    "dates": date_range
+                })
+                # print(f"name : {tenant.name}, year : {move_in.year}, ")
+        
+        apartment_data.append({
+            "apartment": apartment,
+            "tenants": tenant_entries
+        })
+
+    context = {
+        "apartment_data": apartment_data,
+        "start_date": start_date.strftime("%Y-%m-%d"),
+        "end_date": end_date.strftime("%Y-%m-%d"),
+        "date_range": [start_date + timedelta(days=i) for i in range((end_date - start_date).days + 1)],
+        "today": today,
+
+    }
+    return render(request, "calendar_app/engaged_apartments.html", context)
