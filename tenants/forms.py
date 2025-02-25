@@ -21,6 +21,8 @@ class TenantForm(forms.ModelForm):
         apartment_choices = []  # Initialize an empty list to store choices
 
         for apartment in apartments:
+            # commenting apartment choosing lable for client request
+            '''
             if apartment.is_booked:
                 # Fetch the first tenant associated with this apartment
                 tenant = Tenant.objects.filter(apartment=apartment).first()
@@ -39,6 +41,8 @@ class TenantForm(forms.ModelForm):
                     # If no future booking, mark it as fully available
                     label = f"Apartment {apartment.number} : (free)"
             apartment_choices.append((apartment.id, label))  # Append choices to the list
+            '''            
+            apartment_choices.append((apartment.id, f"Apartment {apartment.number}"))
 
         # Set the choices for the apartment field in the form
         self.fields['apartment'].choices = apartment_choices
@@ -50,7 +54,7 @@ class TenantForm(forms.ModelForm):
         move_out_date = cleaned_data.get('move_out_date')
         contact = cleaned_data.get('contact')
         apartment = cleaned_data.get('apartment')
-        
+        print(apartment)
         if move_in_date and move_out_date:
             # Check if the selected apartment is already booked during the given date range
             overlapping_tenants = Tenant.objects.filter(
@@ -61,7 +65,7 @@ class TenantForm(forms.ModelForm):
 
             if overlapping_tenants.exists():
                 # If there's an overlap, show an error
-                self.add_error('apartment', 'This apartment is already booked for the specified time range.')
+                self.add_error('apartment', f'Apartment {apartment.number} is already booked during the selected date range. Confirm the availability from Engaged Apartments page and try again.')
         
         if contact and not contact.isdigit():
             # Ensure contact contains only digits

@@ -158,16 +158,25 @@ def get_events(request, year, month, day):
 
 def engaged_apartments(request):
     today = now().date()
-    print(today)
     # Get the filter dates from the request
     start_date = request.GET.get('start_date', now().date())
     end_date = request.GET.get('end_date', now().date() + timedelta(days=30))  # Default to next 30 days
 
+    # start_date, end_date = today, today + timedelta(days=30)
+    # form = DateRangeForm(request.GET or None)
+    # if form.is_valid() and form.cleaned_data["date_range"]:
+    #     date_range = form.cleaned_data["date_range"]
+    #     dates = date_range.split(" to ")
+    #     if len(dates) == 2:
+    #         start_date = datetime.strptime(dates[0], "%Y-%m-%d").date()
+    #         end_date = datetime.strptime(dates[1], "%Y-%m-%d").date()
+
+    # else:
+    #     form = DateRangeForm(initial={"date_range": f"{start_date} to {end_date}"})
+        
     # Convert to datetime objects
     start_date = datetime.strptime(str(start_date), "%Y-%m-%d").date()
     end_date = datetime.strptime(str(end_date), "%Y-%m-%d").date()
-
-    print(start_date, end_date)
     
     # Fetch engaged apartments (those with at least one tenant)
     engaged_apartments = Apartment.objects.filter(
@@ -178,18 +187,14 @@ def engaged_apartments(request):
     # Collect tenant data per apartment
     apartment_data = []
     for apartment in engaged_apartments:
-        # print(apartment)
         tenants = Tenant.objects.filter(apartment=apartment).order_by("move_in_date")
         tenant_entries = []
         
         for tenant in tenants:
-            # print(f"for apartment {apartment}, tenant: {tenant}" )
             if tenant.move_out_date and tenant.move_out_date.date() >= start_date:
                 move_in = tenant.move_in_date.date()
-                # print(f"{tenant.name} move in date: {tenant.move_in_date.date()} and move_in: {move_in}")
                 move_out = tenant.move_out_date.date() if tenant.move_out_date else None
-                # print(f"{tenant.name} move out date: {tenant.move_out_date.date()} and move_out: {move_out}")
-
+                
                 # Prepare date range for visualization
                 date_range = []
                 if move_out:
@@ -206,7 +211,6 @@ def engaged_apartments(request):
                     "move_out": move_out.strftime("%Y-%m-%d") if move_out else "Present",
                     "dates": date_range
                 })
-                # print(f"name : {tenant.name}, year : {move_in.year}, ")
         
         apartment_data.append({
             "apartment": apartment,

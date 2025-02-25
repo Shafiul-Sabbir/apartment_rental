@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'tenants',
     'authentication',
     'calendar_app',
+    'django_flatpickr',
 ]
 
 MIDDLEWARE = [

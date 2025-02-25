@@ -7,8 +7,6 @@
 {% endblock %}
 
 {% block content %}
-
-
 <h2 class="text-center m-4">📅 Engaged Apartments For ( {{ start_date }} to {{ end_date }} )</h2>
 <div class="filter-form">
         <!-- Date Filter Form -->
@@ -22,6 +20,12 @@
         <button type="submit">Filter</button>
     </form>
 </div>
+
+{% comment %} <form method="GET">
+    <label for="date_range">Select Date Range:</label>
+    <input type="text" name="date_range" id="date_range" placeholder="YYYY-MM-DD to YYYY-MM-DD" value="{{ form.date_range.value }}">
+    <button type="submit">Filter</button>
+</form>  {% endcomment %}
 
 
 {% for data in apartment_data %}
