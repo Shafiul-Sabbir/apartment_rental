@@ -180,45 +180,25 @@ tr:hover {
 }
 
 
-/* Tablets (481px to 768px) */
-@media screen and (min-width: 481px) and (max-width: 768px) {
-    h2 {
-        font-size: 20px;
+
+/* Responsiveness for Small Screens */
+@media (max-width: 768px) {
+    .table-container {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .left-table, .right-table {
+        width: 100%;
     }
 
-    .filter-form {
-        width: 80%;
-    }
-
-    form {
-        gap: 8px;
+    th, td {
         padding: 8px;
     }
 
-    .table-container {
-        flex-direction: row; /* Maintain row layout */
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-
-    .left-table {
-        flex-shrink: 0;
-        width: 150px;
-        position: sticky;
-        left: 0;
-        z-index: 2;
-    }
-
-    .left-table table {
-        width: 100%;
-    }
-
-    .right-table {
-        flex-grow: 1;
-        overflow-x: auto;
-    }
-
-    .right-table table {
-        width: 100%;
+    form {
+        flex-direction: column;
+        gap: 5px;
     }
 }
+
