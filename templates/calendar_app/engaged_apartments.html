@@ -8,9 +8,10 @@
 
 {% block content %}
 <h2 class="text-center m-4">📅 Engaged Apartments For ( {{ start_date }} to {{ end_date }} )</h2>
-<div class="filter-form">
+<div class="filter-form ">
+
         <!-- Date Filter Form -->
-    <form method="GET">
+    <form method="GET" >
         <label for="start_date">Start Date:</label>
         <input type="date" id="start_date" name="start_date" value="{{ start_date }}">
         
@@ -30,21 +31,24 @@
 
 {% for data in apartment_data %}
 <!-- Table Container -->
-<div class="table-container">
+<div class="table-container col-10 me-auto ms-auto">
     <!-- Left Table: Apartments -->
     <div class="left-table">
         <table>
             <thead>
                 <tr>
-                    <th colspan="2">Apartment Number: {{ data.apartment.number }}</th>
+                    <th colspan="2">Apartment - {{ data.apartment.number }}</th>
                 </tr>
             </thead>
             <tbody>
                 {% for tenant in data.tenants %}
-                    <tr>
-                        <td class="year-cell">{{ tenant.year }}</td>
-                        <td class="name-cell">{{ tenant.name }}</td>
-                    </tr>
+                    {% if tenant.year and tenant.name %}
+                        <tr>
+                            <td class="year-cell">{{ tenant.year }}</td>
+                            <td class="name-cell">{{ tenant.name|slice:":10" }}</td>
+                            {% comment %} <td class="name-cell" data-fullname="{{ tenant.name }}">{{ tenant.name }}</td> {% endcomment %}
+                        </tr>
+                    {% endif %}
                 {% endfor %}
             </tbody>
         </table>
@@ -64,11 +68,7 @@
                 {% for tenant in data.tenants %}
                     <tr>
                         {% for day in date_range %}
-                            {% if day < today %}  <!-- If day is in the past -->
-                                <td class="{% if day|date:'Y-m-d' in tenant.dates %}past{% endif %}"></td>
-                            {% else %}
-                                <td class="{% if day|date:'Y-m-d' in tenant.dates %}engaged{% endif %}"></td>
-                            {% endif %}
+                            <td class="{% if day|date:'Y-m-d' in tenant.dates %}engaged{% endif %}"></td>
                         {% endfor %}
                     </tr>
                 {% endfor %}
@@ -77,6 +77,32 @@
     </div>
 
 </div>
+
 {% endfor %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        function updateTenantNames() {
+            let nameCells = document.querySelectorAll(".name-cell");
+            nameCells.forEach(cell => {
+                let fullName = cell.getAttribute("data-fullname"); // Get full name
+                if (!fullName) return; // Avoid errors if data-fullname is missing
+
+                if (window.innerWidth <= 481) {
+                    cell.textContent = fullName.slice(0, 10) + "..."; // Show first 10 characters + "..."
+                } else {
+                    cell.textContent = fullName; // Show full name
+                }
+            });
+        }
+
+        updateTenantNames(); // Run initially
+        window.addEventListener("resize", updateTenantNames); // Update on resize
+    });
+</script>
+
+{% comment %} {% block extra_scripts %}
+    <script src="{% static 'js/calendar_app/engaged_apartments.js' %}"></script>
+{% endblock %} {% endcomment %}
 
 {% endblock %}

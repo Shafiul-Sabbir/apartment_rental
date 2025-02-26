@@ -1,3 +1,5 @@
+
+
 /* Page Title */
 h2 {
     text-align: center;
@@ -11,12 +13,13 @@ h2 {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
+    width:30%;
     margin: 0 auto;
 }
 form {
     
     display: flex;
+    width: 100%;
     justify-content: center;
     align-items: center;
     gap: 10px;
@@ -30,7 +33,6 @@ form {
 form label {
     font-weight: bold;
     color: #555;
-    white-space: nowrap;
 }
 
 form input {
@@ -178,66 +180,6 @@ tr:hover {
 }
 
 
-
-/* Tablets (481px to 768px) */
-@media screen and (min-width: 0px) and (max-width: 480px) {
-    h2 {
-        font-size: 15px;
-    }
-
-    .filter-form {
-        width: 80%;
-        
-    }
-
-    form {
-        gap: 8px;
-        padding: 8px;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .table-container {
-        display: flex;
-        flex-direction: row; /* Maintain row layout */
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-
-    .left-table {
-        flex-shrink: 0;
-        width: 120px;
-        position: sticky;
-        left: 0;
-        z-index: 2;
-    }
-
-    .left-table table {
-        width: 100%;
-    }
-
-    .left-table th {
-        height: 50px;
-        width: 50%;
-        padding: 8px;
-        font-size: 12px;
-    }
-    
-    .left-table td {
-        padding: 6px;
-        font-size: 12px;
-    }
-
-    .right-table {
-        flex-grow: 1;
-        overflow-x: auto;
-    }
-
-    .right-table table {
-        width: 100%;
-    }
-}
-
 /* Tablets (481px to 768px) */
 @media screen and (min-width: 481px) and (max-width: 768px) {
     h2 {
@@ -246,14 +188,11 @@ tr:hover {
 
     .filter-form {
         width: 80%;
-
     }
 
     form {
         gap: 8px;
         padding: 8px;
-        display: flex;
-        flex-direction: column;
     }
 
     .table-container {
@@ -281,72 +220,5 @@ tr:hover {
 
     .right-table table {
         width: 100%;
-    }
-}
-
-/* Small Laptops (769px to 1024px) */
-@media screen and (min-width: 769px) and (max-width: 1024px) {
-    h2 {
-        font-size: 25px;
-    }
-
-    .filter-form {
-        width: 90%;
-    }
-
-    form {
-        gap: 8px;
-        padding: 8px;
-    }
-
-    .table-container {
-        flex-direction: row; /* Maintain row layout */
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-
-    .left-table {
-        flex-shrink: 0;
-        width: 200px;
-        position: sticky;
-        left: 0;
-        z-index: 2;
-    }
-
-    .left-table table {
-        width: 100%;
-    }
-
-    .right-table {
-        flex-grow: 1;
-        overflow-x: auto;
-    }
-
-    .right-table table {
-        width: 100%;
-    }
-}
-
-/* Large Screens (Above 1024px) */
-@media screen and (min-width: 1025px) {
-    .filter-form {
-        width: 40%;
-    }
-
-    form {
-        padding: 12px;
-    }
-
-    .table-container {
-        flex-direction: row;
-    }
-
-    .left-table {
-        width: 250px;
-    }
-
-    .right-table th,
-    .right-table td {
-        font-size: 16px;
     }
 }

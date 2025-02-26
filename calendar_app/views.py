@@ -163,28 +163,14 @@ def engaged_apartments(request):
         # Get the filter dates from the request
         start_date = request.GET.get('start_date', now().date())
         end_date = request.GET.get('end_date', now().date() + timedelta(days=30))  # Default to next 30 days
-
-        # start_date, end_date = today, today + timedelta(days=30)
-        # form = DateRangeForm(request.GET or None)
-        # if form.is_valid() and form.cleaned_data["date_range"]:
-        #     date_range = form.cleaned_data["date_range"]
-        #     dates = date_range.split(" to ")
-        #     if len(dates) == 2:
-        #         start_date = datetime.strptime(dates[0], "%Y-%m-%d").date()
-        #         end_date = datetime.strptime(dates[1], "%Y-%m-%d").date()
-
-        # else:
-        #     form = DateRangeForm(initial={"date_range": f"{start_date} to {end_date}"})
             
         # Convert to datetime objects
         start_date = datetime.strptime(str(start_date), "%Y-%m-%d").date()
         end_date = datetime.strptime(str(end_date), "%Y-%m-%d").date()
         
         # Fetch engaged apartments (those with at least one tenant)
-        engaged_apartments = Apartment.objects.filter(
-            tenant__isnull=False,
-            tenant__move_in_date__lte=end_date,
-            tenant__move_out_date__gte=start_date).distinct().order_by('number')
+        
+        engaged_apartments = Apartment.objects.all().order_by('number')
 
         # Collect tenant data per apartment
         apartment_data = []
