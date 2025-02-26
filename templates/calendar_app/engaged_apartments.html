@@ -45,8 +45,7 @@
                     {% if tenant.year and tenant.name %}
                         <tr>
                             <td class="year-cell">{{ tenant.year }}</td>
-                            <td class="name-cell">{{ tenant.name|slice:":10" }}</td>
-                            {% comment %} <td class="name-cell" data-fullname="{{ tenant.name }}">{{ tenant.name }}</td> {% endcomment %}
+                            <td class="name-cell" data-fullname="{{ tenant.name }}">{{ tenant.name }}</td>
                         </tr>
                     {% endif %}
                 {% endfor %}
@@ -80,29 +79,9 @@
 
 {% endfor %}
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        function updateTenantNames() {
-            let nameCells = document.querySelectorAll(".name-cell");
-            nameCells.forEach(cell => {
-                let fullName = cell.getAttribute("data-fullname"); // Get full name
-                if (!fullName) return; // Avoid errors if data-fullname is missing
 
-                if (window.innerWidth <= 481) {
-                    cell.textContent = fullName.slice(0, 10) + "..."; // Show first 10 characters + "..."
-                } else {
-                    cell.textContent = fullName; // Show full name
-                }
-            });
-        }
-
-        updateTenantNames(); // Run initially
-        window.addEventListener("resize", updateTenantNames); // Update on resize
-    });
-</script>
-
-{% comment %} {% block extra_scripts %}
+{% block extra_scripts %}
     <script src="{% static 'js/calendar_app/engaged_apartments.js' %}"></script>
-{% endblock %} {% endcomment %}
+{% endblock %}
 
 {% endblock %}
