@@ -61,6 +61,7 @@ Follow the prompts to set up your admin credentials.
 python manage.py runserver
 ```
 Access the project at: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+Test the Login credentials : (id : admin, pass : admin)
 
 ---
 
