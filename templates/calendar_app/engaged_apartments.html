@@ -8,10 +8,10 @@
 
 {% block content %}
 <h2 class="text-center m-4">📅 Engaged Apartments For ( {{ start_date }} to {{ end_date }} )</h2>
-<div class="filter-form ">
 
-        <!-- Date Filter Form -->
-    <form method="GET" >
+<!-- Date Filter Form -->
+<div class="filter-form">
+    <form method="GET">
         <label for="start_date">Start Date:</label>
         <input type="date" id="start_date" name="start_date" value="{{ start_date }}">
         
@@ -22,69 +22,52 @@
     </form>
 </div>
 
-
 <div class="table-container col-10 me-auto ms-auto">
     <div class="left-table">
         <table>
             <thead>
                 <tr>
-                    <th colspan="2" class="apartment-header">Apartments</th>
+                    <th class="apartment-header">Apartments</th>
                 </tr>
-            
+            </thead>
             <tbody>
-                {% comment %} <tr>
-                    <td colspan="2" class="apartment-header">Apartments</td>
-                </tr> {% endcomment %}
                 {% for data in apartment_data %}
                     <tr>
-                        <td colspan="2" class="bg-gray">Apartment - {{ data.apartment.number }}</td>
+                        <td class="bg-gray">Apartment - {{ data.apartment.number }}</td>
                     </tr>
-                    {% for tenant in data.tenants %}
-                        {% if tenant.year and tenant.name %}
-                            <tr>
-                                <td class="year-cell">{{ tenant.year }}</td>
-                                <td class="name-cell" data-fullname="{{ tenant.name }}">{{ tenant.name }}</td>
-                            </tr>
-                        {% endif %}
-                    {% endfor %}
                 {% endfor %}
             </tbody>
         </table>
-
     </div>
+
     <div class="right-table"> 
         <table>
             <thead>
                 <tr>
-                {% for day in date_range %}
-                    <th>{{ day.day }}</th>  <!-- Show only day, not year or month -->
-                {% endfor %}
+                    {% for day in date_range %}
+                        <th>{{ day.day }}</th>  <!-- Display only day number -->
+                    {% endfor %}
                 </tr>
             </thead>
-        
             <tbody>
                 {% for data in apartment_data %}
-                    <tr>
-                        {% for day in date_range %}
-                            <td></td>
-                        {% endfor %}
-                    </tr>
-                    {% for tenant in data.tenants %}
-                        <tr>
-                            {% for day in date_range %}
-                                <td class="{% if day|date:'Y-m-d' in tenant.dates %}engaged{% endif %}"></td>
-                            {% endfor %}
-                        </tr>
+                <tr>
+                    {% for cell in data.date_list %}
+                        <td class="{% if cell.day %}engaged{% endif %}" title="{{ cell.day }}">
+                            {% if cell.first_time %}
+                                <span class="cell-text">{{ cell.first_time|slice:":10" }}{% if cell.first_time|length > 10 %}...{% endif %}</span>
+                            {% endif %}
+                        </td>
                     {% endfor %}
-                {% endfor %}
+                </tr>
+                {% endfor %}            
             </tbody>
         </table>
     </div>
-
 </div>
 
 {% block extra_scripts %}
-    <script src="{% static 'js/calendar_app/engaged_apartments.js' %}"></script>
+<script src="{% static 'js/calendar_app/engaged_apartments.js' %}"></script>
 {% endblock %}
 
 {% endblock %}

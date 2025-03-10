@@ -18,7 +18,7 @@
     </div>
     {% endfor %} {% endif %}
     <h1 class="mb-4">🏠 Tenant List</h1>
-    <a class="btn btn-success mb-3" href="{% url 'add_tenant' %}">
+    <a class="btn mb-3" href="{% url 'add_tenant' %}">
       ➕ Add New Tenant
     </a>
   </div>
@@ -26,7 +26,7 @@
   {% if tenants %}
   <div class="card shadow-lg p-4">
     <p class="fw-bold text-center">
-      Total Tenants: <span class="text-primary">{{ tenants|length }}</span>
+      Total Tenants : <span class="text-primary">{{ tenants|length }}</span>
     </p>
 
     <div class="table-responsive">
@@ -56,7 +56,7 @@
             <td>
               <a
                 href="{% url 'tenant_details' tenant.id %}"
-                class="btn btn-info btn-sm"
+                class="btn  btn-sm"
                 >🔍 Details</a
               >
             </td>

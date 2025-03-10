@@ -87,26 +87,21 @@ form button:hover {
     border: 1px solid #c3c3c3 !important;
     font-size: 16px;
     height: 50px;
+    /* min-width: 50px; */
+}
+.right-table th {
     min-width: 50px;
+    max-width: 50px;
 }
 
 .left-table td, .right-table td {
     border: 1px solid #ddd;
-    height: 25px;
+    height: 35px;
     padding: 0px 5px;
     font-size: 14px;
     color: #555;
 }
 
-.left-table .year-cell {
-    width : 25%;
-    text-align: center;
-}
-
-.left-table .name-cell {
-    width: 75%;
-    text-align: center;
-}
 
 /* Right Table: Calendar */
 .right-table {
@@ -125,10 +120,61 @@ form button:hover {
 }
 
 /* Engaged Apartments: Highlighting */
-td.engaged {
-    background-color: #57bce2 !important; /* Green for engaged apartments */
-    border: 1px solid #57bce2 !important;
+
+.cell-text {
+    display: inline-block;
+    max-width: 50px; /* Adjust width as needed */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
+
+td.engaged {
+    position: relative;
+    cursor: pointer;
+    background-color: #57bce2;
+    border: 1px solid #57bce2;
+    color: white;
+    text-align: center;
+}
+
+/* Show full text on hover */
+td.engaged:hover::after {
+    content: attr(title);
+    position: absolute;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    white-space: nowrap;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    font-size: 15px;
+    border: 1px solid #57bce2;
+}
+td.empty-cell {
+    position: relative;
+    cursor: pointer;
+    background-color: #57bce2;
+    border: 1px solid #57bce2;
+}
+
+td.empty-cell:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    white-space: nowrap;
+    z-index: 10;
+}
+
 td.past {
     background-color: #a39c9c !important; /* Gray for past dates */
     border: 1px solid #a39c9c !important;

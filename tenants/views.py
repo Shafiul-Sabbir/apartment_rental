@@ -34,7 +34,7 @@ def update_tenant_status(tenant):
 def tenant_list(request):
     user = request.user
     if user.is_authenticated and user.is_superuser:  # Ensure only admin users can access
-        tenants = Tenant.objects.all()
+        tenants = Tenant.objects.all().order_by('-move_in_date')  # Fetch all tenants
         
         # Update status of each tenant before displaying
         for tenant in tenants:
