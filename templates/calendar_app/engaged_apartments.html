@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Engaged Apartments{% endblock %}
+{% block title %}Engaged Apartments | Apartment Rental{% endblock %}
 
 {% block extra_head %}
 <link rel="stylesheet" href="{% static 'css/calendar_app/engaged_apartments.css' %}">
@@ -27,14 +27,23 @@
         <table>
             <thead>
                 <tr>
+                    <th class="months-header">Months --> </th>
+                </tr>
+                <tr>
                     <th class="apartment-header">Apartments</th>
                 </tr>
             </thead>
             <tbody>
                 {% for data in apartment_data %}
+                    {% if data.apartment.number < 10 %}
+                    <tr>
+                        <td class="bg-gray">Apartment - 0{{ data.apartment.number }}</td>
+                    </tr>
+                    {% else %}
                     <tr>
                         <td class="bg-gray">Apartment - {{ data.apartment.number }}</td>
                     </tr>
+                    {% endif %}
                 {% endfor %}
             </tbody>
         </table>
@@ -43,6 +52,14 @@
     <div class="right-table"> 
         <table>
             <thead>
+                 <!-- Row for Months -->
+                <tr>
+                    {% comment %} <th class="months-cell-header"></th> {% endcomment %}
+                    {% for month in months_data %}
+                        <th colspan="{{ month.colspan  }}" class="month-header">{{ month.month }}</th>
+                    {% endfor %}
+                </tr>
+                <!-- Row for Dates -->
                 <tr>
                     {% for day in date_range %}
                         <th>{{ day.day }}</th>  <!-- Display only day number -->

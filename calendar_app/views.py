@@ -171,6 +171,30 @@ def engaged_apartments(request):
     start_date = datetime.strptime(str(start_date), "%Y-%m-%d").date()
     end_date = datetime.strptime(str(end_date), "%Y-%m-%d").date()
 
+    # Create a list of dates in the range
+    date_range = [start_date + timedelta(days=i) for i in range((end_date - start_date).days + 1)]
+    
+    # Group dates by month and calculate colspan
+    months_data = []
+    current_month = date_range[0].month
+    month_name = calendar.month_name[current_month]
+    colspan = 0
+
+    for day in date_range:
+        if day.month == current_month:
+            colspan += 1
+        else:
+            # Append previous month data
+            months_data.append({"month": month_name, "colspan": colspan})
+            # Reset for new month
+            current_month = day.month
+            month_name = calendar.month_name[current_month]
+            colspan = 1
+
+    # Append last month
+    if colspan > 0:
+        months_data.append({"month": month_name, "colspan": colspan})
+
     # Fetch apartments with tenants
     engaged_apartments = Apartment.objects.prefetch_related('tenant_set').order_by('number')
 
@@ -179,36 +203,35 @@ def engaged_apartments(request):
         tenants = apartment.tenant_set.all().order_by("move_in_date")
 
         # Create a timeline dictionary to track tenant stays
-        date_map = {day: {"day": "", "first_time": ""} for day in (start_date + timedelta(days=i) for i in range((end_date - start_date).days + 1))}
-        
+        date_map = {day: {"day": "", "first_time": ""} for day in date_range}
+
         for tenant in tenants:
             move_in = tenant.move_in_date.date()
             move_out = tenant.move_out_date.date() if tenant.move_out_date else end_date
 
-            first_time_triggered = False  # To ensure first_time is set only once per tenant
+            first_time_triggered = False
 
             for i in range((move_out - move_in).days + 1):
                 day = move_in + timedelta(days=i)
 
                 if start_date <= day <= end_date:
-                    # Set tenant name for all occupied days
                     date_map[day]["day"] = tenant.name  
 
-                    # Set first_time only on the first day of the tenant's stay
                     if not first_time_triggered:
                         date_map[day]["first_time"] = tenant.name
-                        first_time_triggered = True  # Ensure this happens only once per tenant
+                        first_time_triggered = True
 
         apartment_data.append({
             "apartment": apartment,
-            "date_list": list(date_map.values())  # Convert dict to ordered list
+            "date_list": list(date_map.values())  
         })
 
     context = {
         "apartment_data": apartment_data,
         "start_date": start_date.strftime("%Y-%m-%d"),
         "end_date": end_date.strftime("%Y-%m-%d"),
-        "date_range": [start_date + timedelta(days=i) for i in range((end_date - start_date).days + 1)],
+        "date_range": date_range,
+        "months_data": months_data,  # Pass months data to the template
     }
 
     return render(request, "calendar_app/engaged_apartments.html", context)
