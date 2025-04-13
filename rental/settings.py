@@ -24,11 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-pnpcjx*!jc#unttpv9ju4mtc78eizok1p9xj5sp1!-$-t&i)pa'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-DEBUG = False
+DEBUG = True
+# DEBUG = False
 
-# ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['apartment-rental-lx35.onrender.com']
+ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['apartment-rental-lx35.onrender.com']
 
 
 # Application definition
