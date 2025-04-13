@@ -4,8 +4,14 @@
 {% block title %}Login | Apartment Rental{% endblock %}
 
 {% block content %}
+
 <div class="d-flex justify-content-center align-items-center vh-100">
     <div class="form-container">
+        <div>
+            <p>If you are a visitor of this site, you can test all the functionalities using these credentials. </p>
+            <h5>Username : admin</h5>
+            <h5>Password : 1234</h5>
+        </div>
         <h2 class="text-center mb-4">Login</h2>
 
         <!-- Display Django Messages -->
@@ -16,6 +22,7 @@
                 </div>
             {% endfor %}
         {% endif %}
+
 
         <form method="post" class="needs-validation" novalidate>
             {% csrf_token %}
@@ -42,7 +49,7 @@
                 <button type="submit" class="btn btn-primary">Login</button>
             </div>
         </form>
-    </div>    
+    </div>
 </div>
 
 <style>
