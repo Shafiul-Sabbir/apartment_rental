@@ -80,7 +80,7 @@ form button:hover {
 
 }
 
-.left-table .apartment-header, .right-table th {
+.left-table .apartment-header, .left-table .months-header, .right-table th {
     text-align: center;
     background-color: #DDDDDD;
     color: #646C9A;
@@ -100,6 +100,8 @@ form button:hover {
     padding: 0px 5px;
     font-size: 14px;
     color: #555;
+    text-align: center;
+    cursor: pointer;
 }
 
 
